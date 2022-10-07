@@ -41,6 +41,8 @@ app.use(
   })
 );
 
+app.use('/resume', express.static(__dirname + '/tmp'));
+
 app.get("*.*", express.static(__dirname + "/client/build"));
 
 api(app);
