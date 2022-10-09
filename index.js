@@ -36,12 +36,10 @@ app.use(
 );
 
 app.use(
-  fileupload({
-    useTempFiles: true,
-  })
+  fileupload()
 );
 
-app.use('/resume', express.static(__dirname + '/tmp'));
+app.use('/resume', express.static(__dirname + '/uploads'));
 
 app.get("*.*", express.static(__dirname + "/client/build"));
 

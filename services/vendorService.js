@@ -1,6 +1,6 @@
 const Vendors = require("../models/vendors");
 const VendorDetails = require("../models/vendorDetails");
-var os = require("os");
+const path = require('path');
 
 const getAllVendors = async () => {
   try {
@@ -49,15 +49,21 @@ const postVendorsDetails = async (fullName, vendorName, technology, file) => {
     // });
 
     console.log("file: ", file);
-    const domain = os.hostname();
-    console.log("domain: ", domain)
 
+    const fileName = Date.now() + "-" + file.name;
+
+    file.mv(`./uploads/` + fileName, function(err){
+      if(err){
+        console.log(err);
+        throw err;
+      }
+    });
   
     let vendorDetails = new VendorDetails({
       fullName: fullName,
       vendorName: vendorName,
       technology: technology,
-      resumeFile: `https://staffing-system-app-rushikesh.herokuapp.com/resume/${/[^/]*$/.exec(file.tempFilePath)[0]}`
+      resumeFile: `https://staffing-system-app-rushikesh.herokuapp.com/resume/${fileName}}`
     });
     
     result = await vendorDetails.save();
