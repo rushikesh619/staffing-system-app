@@ -63,7 +63,7 @@ const postVendorsDetails = async (fullName, vendorName, technology, file) => {
       fullName: fullName,
       vendorName: vendorName,
       technology: technology,
-      resumeFile: `https://staffing-system-app-rushikesh.herokuapp.com/resume/${fileName}}`
+      resumeFile: `https://staffing-system-app-rushikesh.herokuapp.com/resume/${fileName}`
     });
     
     result = await vendorDetails.save();
