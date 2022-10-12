@@ -39,7 +39,7 @@ app.use(
   fileupload()
 );
 
-app.use('/resume', express.static(__dirname + '/uploads'));
+// app.use('/resume', express.static(__dirname + '/uploads'));
 
 app.get("*.*", express.static(__dirname + "/client/build"));
 

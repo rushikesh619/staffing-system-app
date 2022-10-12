@@ -1,6 +1,21 @@
 const Vendors = require("../models/vendors");
 const VendorDetails = require("../models/vendorDetails");
 const path = require('path');
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
+
+async function uploadFile(file) {
+  const params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: `fileupload/${Date.now()}-${file.name}`, // put all image to fileupload folder with name scanskill-${Date.now()}${file.name}`
+    Body: file.data,
+  };
+  const data = await s3.upload(params).promise();
+  return data.Location; // returns the url location
+}
 
 const getAllVendors = async () => {
   try {
@@ -50,20 +65,22 @@ const postVendorsDetails = async (fullName, vendorName, technology, file) => {
 
     console.log("file: ", file);
 
-    const fileName = Date.now() + "-" + file.name;
+    // const fileName = Date.now() + "-" + file.name;
 
-    file.mv(`./uploads/` + fileName, function(err){
-      if(err){
-        console.log(err);
-        throw err;
-      }
-    });
+    // file.mv(`./uploads/` + fileName, function(err){
+    //   if(err){
+    //     console.log(err);
+    //     throw err;
+    //   }
+    // });
+
+    const fileUrl = await uploadFile(file);
   
     let vendorDetails = new VendorDetails({
       fullName: fullName,
       vendorName: vendorName,
       technology: technology,
-      resumeFile: `https://staffing-system-app-rushikesh.herokuapp.com/resume/${fileName}`
+      resumeFile: fileUrl
     });
     
     result = await vendorDetails.save();
